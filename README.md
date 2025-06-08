@@ -101,8 +101,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Flask for the web framework
 - All contributors who helped shape this project
 
-## Contact
-
-Alan Cyril Sunny - [your.email@example.com]
-
-Project Link: [https://github.com/dragonpilee/medisage](https://github.com/dragonpilee/medisage)
