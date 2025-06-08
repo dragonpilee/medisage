@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💊 MediSage - AI Pharmacology Assistant</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #4CAF50;
+            --accent-color: #2196F3;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --danger-color: #F44336;
+            --info-color: #2196F3;
+            --background-color: #f5f6fa;
+            --card-background: #ffffff;
+            --text-color: #2d3436;
+            --border-radius: 12px;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --mobile-padding: 1rem;
+            --tablet-padding: 2rem;
+            --desktop-padding: 2rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: var(--desktop-padding);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 0 var(--desktop-padding);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--primary-color), #3498db);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .drug-search {
+            background: white;
+            padding: var(--desktop-padding);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .drug-search:hover {
+            transform: translateY(-5px);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 120px;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary-color), #3498db);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pill-icon {
+            font-size: 1.2rem;
+            line-height: 1;
+            color: white;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(74, 144, 226, 0.3);
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .drug-info {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: var(--desktop-padding);
+            box-shadow: var(--shadow-lg);
+            max-height: 80vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .footer {
+            margin-top: 2rem;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-color);
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .drug-info::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .drug-info::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .drug-info::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 4px;
+        }
+
+        .drug-info::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
+        }
+
+        .drug-summary {
+            background: var(--card-background);
+            border-radius: var(--border-radius);
+            padding: var(--desktop-padding);
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .drug-summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .drug-summary-title {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .drug-summary-subtitle {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .drug-summary-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .summary-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--info-color);
+        }
+
+        .section-header {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .section-content {
+            line-height: 1.8;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        .section-content ul,
+        .section-content ol {
+            margin-left: 2rem;
+            padding-left: 1rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .section-content li::before {
+            content: "•";
+            color: var(--accent-color);
+            position: absolute;
+            left: 0;
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            background: linear-gradient(135deg, #fff3f4, #ffebee);
+            border: 2px solid var(--danger-color);
+            margin: 1rem 0;
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @media (max-width: 1024px) {
+            :root {
+                --desktop-padding: 1.5rem;
+            }
+
+            .drug-summary-content {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --desktop-padding: 1rem;
+            }
+
+            body {
+                padding: var(--mobile-padding);
+            }
+
+            .container {
+                padding: 0 var(--mobile-padding);
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            .drug-info {
+                padding: var(--mobile-padding);
+            }
+
+            .drug-summary {
+                padding: var(--mobile-padding);
+            }
+
+            .drug-summary-content {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-section {
+                padding: 1.2rem;
+            }
+
+            textarea {
+                min-height: 100px;
+            }
+
+            button {
+                padding: 0.8rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --mobile-padding: 0.75rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .drug-search {
+                padding: var(--mobile-padding);
+            }
+
+            textarea {
+                min-height: 80px;
+                font-size: 0.95rem;
+            }
+
+            .section-header {
+                font-size: 1rem;
+            }
+
+            .section-content {
+                font-size: 0.9rem;
+            }
+        }
+
+        .drug-section {
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-content {
+            margin-left: 1rem;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .section-content ul,
+        .section-content ol {
+            margin-left: 2rem;
+            padding-left: 1rem;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .section-content strong {
+            color: var(--primary-color);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            background-color: #fdf2f2;
+            border: 1px solid #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .drug-search, .drug-info {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MediSage - AI Pharmacology Assistant</h1>
+            <p>Get detailed information about drugs and medications</p>
+        </header>
+
+        <div class="drug-search">
+            <textarea id="userInput" placeholder="Enter a drug name or interaction query... (e.g., 'paracetamol', 'ibuprofen interactions')"></textarea>
+            <button class="pill-button" onclick="sendQuery()">
+                <span class="pill-icon">💊</span>
+                Search
+            </button>
+        </div>
+
+        <div id="output" class="drug-info"></div>
+    </div>
+
+    <footer class="footer">
+        <p>Designed and developed by Alan Cyril Sunny</p>
+    </footer>
+
+    <script>
+        const drugCache = new Map();
+        let isLoading = false;
+
+        function formatResponse(response) {
+            // Parse the response into sections
+            const sections = response.split('\n\n');
+            let html = '';
+
+            // Find the title and subtitle
+            let title = '';
+            let subtitle = '';
+            let contentSections = [];
+
+            sections.forEach(section => {
+                if (section.includes('Summary')) {
+                    const parts = section.split(' – ');
+                    title = parts[0].trim();
+                    subtitle = parts[1]?.trim() || '';
+                } else if (section.trim()) {
+                    contentSections.push(section);
+                }
+            });
+
+            // Create the summary layout
+            html += `<div class="drug-summary">
+                        <div class="drug-summary-header">
+                            <div>
+                                <h2 class="drug-summary-title">${title}</h2>
+                                <p class="drug-summary-subtitle">${subtitle}</p>
+                            </div>
+                        </div>
+                        <div class="drug-summary-content">
+                            ${contentSections.map(section => {
+                                const [header, content] = section.split(':');
+                                return `<div class="summary-section">
+                                            <div class="section-header">${header}</div>
+                                            <div class="section-content">${content.trim()}</div>
+                                        </div>`;
+                            }).join('')}
+                        </div>
+                    </div>`;
+
+            return html;
+        }
+
+        async function sendQuery() {
+            if (isLoading) return;
+            
+            const input = document.getElementById("userInput").value.trim();
+            if (!input) return;
+            
+            const outputDiv = document.getElementById("output");
+            outputDiv.innerHTML = '<div class="loading"><div class="loading-spinner"></div></div>';
+            isLoading = true;
+
+            // Check cache first
+            if (drugCache.has(input)) {
+                outputDiv.innerHTML = drugCache.get(input);
+                isLoading = false;
+                return;
+            }
+
+            try {
+                const res = await fetch("/query", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({input})
+                });
+
+                if (!res.ok) {
+                    throw new Error('Error fetching drug information');
+                }
+
+                // Get response headers
+                const contentType = res.headers.get('content-type');
+                
+                if (contentType && contentType.includes('text/event-stream')) {
+                    // Handle streaming response
+                    const reader = res.body.getReader();
+                    const decoder = new TextDecoder();
+                    let responseText = '';
+
+                    while (true) {
+                        const {value, done} = await reader.read();
+                        if (done) break;
+                        
+                        const chunk = decoder.decode(value, {stream: true});
+                        responseText += chunk;
+                        
+                        // Update UI with partial response
+                        const formatted = formatResponse(responseText);
+                        outputDiv.innerHTML = formatted;
+                    }
+                    
+                    // Cache complete response
+                    drugCache.set(input, formatted);
+                } else {
+                    // Handle non-streaming response
+                    const data = await res.json();
+                    const formattedResponse = formatResponse(data.response);
+                    outputDiv.innerHTML = formattedResponse;
+                    drugCache.set(input, formattedResponse);
+                }
+            } catch (error) {
+                outputDiv.innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        // Add auto-scroll functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const outputDiv = document.getElementById('output');
+            outputDiv.addEventListener('DOMNodeInserted', function() {
+                outputDiv.scrollTop = outputDiv.scrollHeight;
+            });
+        });
+    </script>
+</body>
+</html>
