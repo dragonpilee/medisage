@@ -12,6 +12,32 @@ A professional AI-powered pharmacology assistant that provides detailed drug inf
 - 🔄 Real-time streaming updates
 - 📋 Cache support for faster repeat queries
 
+## Tech Stack
+
+### Backend
+- **Python** - Backend programming language
+- **Flask** - Web framework for handling HTTP requests
+- **LM Studio** - AI model serving platform
+- **Gemma 4B** - Large language model for drug information generation
+
+### Frontend
+- **HTML5** - Markup language for the web interface
+- **CSS3** - Styling and layout
+- **JavaScript** - Client-side interactivity
+- **Markdown** - Response formatting
+
+### Development Tools
+- **Git** - Version control
+- **VS Code** - Code editor
+- **LM Studio** - Model deployment and management
+
+### Key Technologies
+- **AI/ML** - Large language model integration
+- **Web Development** - Modern web technologies
+- **Responsive Design** - Mobile-first approach
+- **Real-time Processing** - Streaming responses
+- **Caching** - Performance optimization
+
 ## Installation
 
 1. Clone the repository:
