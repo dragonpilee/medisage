@@ -2,7 +2,7 @@
 
 ![Flask](https://img.shields.io/badge/Framework-Flask-blue)
 ![Python](https://img.shields.io/badge/Language-Python%203.8+-blue)
-![Gemma-4B](https://img.shields.io/badge/Model-Gemma--4B-purple)
+![Gemma-4B](https://img.shields.io/badge/Model-Custom%20Gemma--4B-purple)
 ![LM Studio](https://img.shields.io/badge/Serving-LM%20Studio-orange)
 ![NVIDIA RTX Optimized](https://img.shields.io/badge/Optimized-NVIDIA%20RTX-green)
 ![MIT License](https://img.shields.io/badge/License-MIT-blue)
@@ -22,9 +22,10 @@ A professional, AI-powered pharmacology assistant that delivers detailed drug in
 - 🚀 Fast, efficient, and streaming responses  
 - 📱 Fully responsive design for all devices  
 - 📋 Caching for faster repeat queries  
-- 🟩 **Optimized for NVIDIA RTX GPUs** for accelerated AI inference
+- 🟩 **Optimized for NVIDIA RTX GPUs** for accelerated AI inference  
+- 🟪 **Custom-tuned Gemma-4B model** for enhanced pharmacology expertise
 
-MediSage is powered by the Gemma-4B language model via LM Studio.
+MediSage is powered by a custom-tuned Gemma-4B language model via LM Studio.
 
 ---
 
@@ -44,6 +45,7 @@ MediSage is powered by the Gemma-4B language model via LM Studio.
 - **Mobile Ready**: Fully responsive for desktop and mobile.
 - **Markdown Support**: Rich, readable formatting for responses.
 - **NVIDIA RTX Optimized**: Leverages CUDA acceleration for faster model inference on RTX GPUs.
+- **Custom-tuned Model**: Utilizes a domain-specialized Gemma-4B model for superior pharmacology answers.
 
 ---
 
@@ -51,7 +53,7 @@ MediSage is powered by the Gemma-4B language model via LM Studio.
 
 - [Flask](https://flask.palletsprojects.com/) – backend framework
 - [Python 3.8+](https://www.python.org/downloads/) – language
-- [Gemma-4B](https://lmstudio.ai/) – language model (via LM Studio)
+- [Custom Gemma-4B](https://lmstudio.ai/) – custom-tuned language model (via LM Studio)
 - [LM Studio](https://lmstudio.ai/) – model serving platform (with NVIDIA RTX GPU support)
 - [HTML5, CSS3, JavaScript] – frontend
 - **Markdown** – for response formatting
@@ -75,12 +77,14 @@ MediSage is powered by the Gemma-4B language model via LM Studio.
 
 3. Ensure you have an NVIDIA RTX GPU and the latest [CUDA Toolkit](https://developer.nvidia.com/cuda-downloads) installed for optimal performance.
 
-4. Run the application:
+4. Make sure your LM Studio instance is running the **custom-tuned Gemma-4B model**.
+
+5. Run the application:
    ```bash
    python app.py
    ```
 
-5. Open your browser and navigate to [http://localhost:5000](http://localhost:5000)
+6. Open your browser and navigate to [http://localhost:5000](http://localhost:5000)
 
 ---
 
@@ -89,7 +93,7 @@ MediSage is powered by the Gemma-4B language model via LM Studio.
 - Python 3.8+
 - Flask
 - Markdown
-- LM Studio with Gemma-4B model
+- LM Studio with **custom-tuned Gemma-4B model**
 - **NVIDIA RTX GPU** (recommended for best AI inference speed)
 - CUDA Toolkit (for GPU acceleration)
 
@@ -147,7 +151,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## 🙏 Acknowledgements
 
-- Powered by Gemma-4B language model via LM Studio
+- Powered by custom-tuned Gemma-4B language model via LM Studio
 - Built with Flask
 - **Optimized for NVIDIA RTX GPUs**
 - Created by ALAN CYRIL SUNNY
