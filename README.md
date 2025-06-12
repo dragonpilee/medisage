@@ -31,8 +31,7 @@ MediSage is powered by a custom-tuned Gemma-4B language model via LM Studio.
 
 ## 📸 Application Preview
 
-<!-- Add a screenshot here if available -->
-<!-- ![MediSage Chat Interface](screenshot.png) -->
+![MediSage Chat Interface](medisage.png)
 
 ---
 
@@ -106,6 +105,7 @@ medisage/
 ├── app.py              # Main Flask application
 ├── requirements.txt    # Python dependencies
 ├── lmstudio_client.py  # LM Studio API client
+├── medisage.png        # Application screenshot
 ├── templates/
 │   └── index.html      # Main HTML template
 └── static/             # Static assets (CSS, JS, images)
